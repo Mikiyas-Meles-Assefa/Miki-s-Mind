@@ -1,0 +1,6 @@
+{
+  "name": "Mickey Mind OS",
+  "description": "A highly customized, borderless personal life operating system for habits, gym, nutrition, and water tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

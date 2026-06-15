@@ -1,0 +1,1402 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #050608;
+  color: #d1d5db;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.glass-panel-heavy {
+  background: rgba(8, 9, 12, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-pill:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Hide Scrollbar but Keep Functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* ==========================================
+   MULTI-THEMES ENGINE STYLES
+   ========================================== */
+
+/* --- GENERAL THEME OVERRIDES --- */
+.indicator-completed {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- THEME APPLE LIGHT (Reminders white template, red accents) --- */
+.theme-apple-light {
+  background-color: #f2f2f7 !important;
+  color: #1a1a1e !important;
+}
+.theme-apple-light .glass-panel {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+}
+.theme-apple-light .glass-panel-heavy {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04) !important;
+}
+.theme-apple-light .glass-pill {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  color: #1a1a1e !important;
+}
+.theme-apple-light .glass-pill:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+/* Typography text color overrides */
+.theme-apple-light .text-white,
+.theme-apple-light .text-zinc-100,
+.theme-apple-light .text-zinc-200 { color: #1a1a1e !important; }
+.theme-apple-light .text-zinc-300 { color: #2c2c2e !important; }
+.theme-apple-light .text-zinc-400 { color: #48484a !important; }
+.theme-apple-light .text-zinc-500 { color: #8e8e93 !important; }
+.theme-apple-light .text-zinc-550 { color: #8e8e93 !important; }
+.theme-apple-light .text-zinc-650,
+.theme-apple-light .text-zinc-600 { color: #c7c7cc !important; }
+/* Row element background overrides */
+.theme-apple-light .bg-zinc-950,
+.theme-apple-light .bg-zinc-900,
+.theme-apple-light .bg-zinc-950\/40,
+.theme-apple-light .bg-zinc-950\/50,
+.theme-apple-light .bg-zinc-950\/60,
+.theme-apple-light .bg-zinc-900\/60,
+.theme-apple-light .bg-zinc-900\/40 {
+  background-color: #f2f2f7 !important;
+  color: #1a1a1e !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+.theme-apple-light .bg-zinc-900 {
+  background-color: #e5e5ea !important;
+}
+/* Indicator colors */
+.theme-apple-light .indicator-completed {
+  background-color: #ff3b30 !important; /* iOS reminders red */
+  border-color: #ff3b30 !important;
+  box-shadow: 0 2px 6px rgba(255, 59, 48, 0.2) !important;
+}
+.theme-apple-light .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-apple-light .indicator-empty {
+  background-color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+.theme-apple-light .border-white\/5,
+.theme-apple-light .border-white\/10,
+.theme-apple-light .border-white\/\[0\.02\] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+.theme-apple-light .text-zinc-500.font-mono.uppercase {
+  color: #ff3b30 !important;
+}
+
+/* --- THEME APPLE DARK (OLED dark reminders) --- */
+.theme-apple-dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+.theme-apple-dark .glass-panel {
+  background: #1c1c1e !important;
+  border-color: #2c2c2e !important;
+  box-shadow: none !important;
+}
+.theme-apple-dark .glass-panel-heavy {
+  background: #1c1c1e !important;
+  border-color: #3d3d41 !important;
+}
+.theme-apple-dark .glass-pill {
+  background: #2c2c2e !important;
+  border-color: #3d3d41 !important;
+  color: #ffffff !important;
+}
+.theme-apple-dark .bg-zinc-950,
+.theme-apple-dark .bg-zinc-900,
+.theme-apple-dark .bg-zinc-950\/40,
+.theme-apple-dark .bg-zinc-950\/60,
+.theme-apple-dark .bg-zinc-900\/60,
+.theme-apple-dark .bg-zinc-900\/40 {
+  background-color: #030303 !important;
+  border-color: #2c2c2e !important;
+}
+.theme-apple-dark .indicator-completed {
+  background-color: #ff453a !important; /* Apple Vivid Red (Dark Mode) */
+  border-color: #ff453a !important;
+  box-shadow: none !important;
+}
+.theme-apple-dark .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-apple-dark .indicator-empty {
+  background-color: #121214 !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+.theme-apple-dark .border-white/5,
+.theme-apple-dark .border-white/10,
+.theme-apple-dark .border-white/\[0\.02\] {
+  border-color: #2c2c2e !important;
+}
+.theme-apple-dark .text-zinc-500.font-mono.uppercase {
+  color: #ff453a !important;
+}
+
+/* --- THEME APPLE REMINDERS DARK (Pitch black notes + crimson accents) --- */
+.theme-apple-reminders-dark {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+.theme-apple-reminders-dark .glass-panel {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+.theme-apple-reminders-dark .glass-panel-heavy {
+  background: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.theme-apple-reminders-dark .glass-pill {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+}
+.theme-apple-reminders-dark .bg-zinc-950,
+.theme-apple-reminders-dark .bg-zinc-900,
+.theme-apple-reminders-dark .bg-zinc-950/40,
+.theme-apple-reminders-dark .bg-zinc-950/60,
+.theme-apple-reminders-dark .bg-zinc-900/60,
+.theme-apple-reminders-dark .bg-zinc-900/40 {
+  background-color: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+.theme-apple-reminders-dark .indicator-completed {
+  background-color: #ff453a !important; /* Apple Red */
+  border-color: #ff453a !important;
+  box-shadow: none !important;
+}
+.theme-apple-reminders-dark .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-apple-reminders-dark .indicator-empty {
+  background-color: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+.theme-apple-reminders-dark .text-zinc-500.font-mono.uppercase {
+  color: #ff453a !important;
+}
+
+/* --- THEME APPLE GLASS (Clear Liquid Glass over Fjord) --- */
+.theme-apple-glass {
+  background-color: #1a222a !important; /* fallback dark slate blue */
+  background-image: 
+    linear-gradient(rgba(10, 15, 20, 0.1), rgba(10, 15, 20, 0.3)),
+    url("https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=1600&q=80") !important; /* Stunning Fjord scenic cabin background */
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  color: #12141a !important;
+}
+.theme-apple-glass .glass-panel {
+  /* Fluid transparent glass overlay exposing background picture with high contrast readability */
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(16px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08), inset 0 2px 4px rgba(255, 255, 255, 0.45) !important;
+}
+.theme-apple-glass .glass-panel-heavy {
+  /* Heavy blurred glass card for modals and main containers */
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(22px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12), inset 0 3px 6px rgba(255, 255, 255, 0.5) !important;
+}
+.theme-apple-glass .glass-pill {
+  /* Sleek navigation droplets with clear transparency and blur */
+  background: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(8px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(130%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #161a22 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04), inset 0 1px 3px rgba(255, 255, 255, 0.45) !important;
+}
+.theme-apple-glass .indicator-completed {
+  /* Vibrant green completed indicator to match the grassy hills */
+  background-color: #1e6b43 !important;
+  border-color: #1e6b43 !important;
+  box-shadow: 0 4px 12px rgba(30, 107, 67, 0.25) !important;
+}
+.theme-apple-glass .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-apple-glass .indicator-empty {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(30, 107, 67, 0.35) !important;
+}
+.theme-apple-glass .bg-zinc-950,
+.theme-apple-glass .bg-zinc-900,
+.theme-apple-glass .bg-zinc-950/40,
+.theme-apple-glass .bg-zinc-950/50,
+.theme-apple-glass .bg-zinc-950/60,
+.theme-apple-glass .bg-zinc-900/60,
+.theme-apple-glass .bg-zinc-900/40,
+.theme-apple-glass .bg-white/\[0\.02\],
+.theme-apple-glass .bg-white/\[0\.01\],
+.theme-apple-glass .bg-zinc-950/20,
+.theme-apple-glass .bg-zinc-900/20 {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #0d1116 !important;
+}
+.theme-apple-glass .border-white/5,
+.theme-apple-glass .border-white/10,
+.theme-apple-glass .border-white/\[0\.02\],
+.theme-apple-glass .border-white/\[0\.04\],
+.theme-apple-glass .border-white/\[0\.01\] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+.theme-apple-glass .text-white,
+.theme-apple-glass .text-zinc-100,
+.theme-apple-glass .text-zinc-200 { color: #0d1116 !important; }
+.theme-apple-glass .text-zinc-300 { color: #1e2430 !important; }
+.theme-apple-glass .text-zinc-400 { color: #323d4f !important; }
+.theme-apple-glass .text-zinc-500 { color: #505f77 !important; }
+.theme-apple-glass .text-zinc-650,
+.theme-apple-glass .text-zinc-600 { color: #6d7f9b !important; }
+
+/* Custom translucent light overlays behind modals */
+.theme-apple-glass .bg-black/60 {
+  background-color: rgba(10, 15, 20, 0.25) !important;
+}
+.theme-apple-glass .backdrop-blur-sm,
+.theme-apple-glass .backdrop-blur-md {
+  backdrop-filter: blur(6px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(130%) !important;
+}
+
+/* Custom premium buttons inside overlays */
+.theme-apple-glass button.bg-white,
+.theme-apple-glass .bg-white button {
+  background-color: #1e6b43 !important;
+  color: #ffffff !important;
+  border: 1px solid #1e6b43 !important;
+}
+.theme-apple-glass button.bg-white:hover,
+.theme-apple-glass .bg-white button:hover {
+  background-color: #154c2f !important;
+}
+.theme-apple-glass button.bg-white *,
+.theme-apple-glass .bg-white button * {
+  color: #ffffff !important;
+}
+
+/* General Wildcard fractional overlays */
+.theme-apple-glass [class*="border-white/"] {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+.theme-apple-glass [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+}
+.theme-apple-glass [class*="bg-zinc-950/"] {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+.theme-apple-glass [class*="bg-zinc-900/"] {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+.theme-apple-glass .text-zinc-950 {
+  color: #0d1116 !important;
+}
+
+/* Slider progression bar */
+.theme-apple-glass #gym-tracker div.h-1.w-full div,
+.theme-apple-glass div#root:nth-of-type(1) > div#mickey-mind-root:nth-of-type(1) > div:nth-of-type(1) > main#os-viewport:nth-of-type(1) > div#gym-tracker:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) {
+  background-color: #1e6b43 !important;
+}
+
+/* Force text/labels inside trackers to clean readable tones */
+.theme-apple-glass #gym-tracker p,
+.theme-apple-glass #gym-tracker span,
+.theme-apple-glass #gym-tracker h2,
+.theme-apple-glass #gym-tracker h3,
+.theme-apple-glass #gym-tracker h4,
+.theme-apple-glass #gym-tracker label,
+.theme-apple-glass #gym-tracker input,
+.theme-apple-glass #gym-tracker b,
+.theme-apple-glass #gym-tracker strong {
+  color: #0d1116 !important;
+}
+
+/* Active checks matching green theme */
+.theme-apple-glass #gym-tracker svg.text-emerald-400 {
+  color: #1e6b43 !important;
+}
+.theme-apple-glass .text-emerald-400 {
+  color: #1e6b43 !important;
+}
+.theme-apple-glass .border-emerald-400 {
+  border-color: #1e6b43 !important;
+}
+.theme-apple-glass .bg-emerald-400/20 {
+  background-color: rgba(30, 107, 67, 0.15) !important;
+}
+
+/* Clear timeline cell background segment overlays */
+.theme-apple-glass div[id^="timeline-day-"],
+.theme-apple-glass div[id^="timeline-day-"]:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* --- THEME APPLE HEALTH (Energetic Light Layout with Crimson Red, Purple, and Deep Green) --- */
+.theme-apple-health {
+  background-color: #f4f5f8 !important;
+  color: #0c0d10 !important;
+}
+.theme-apple-health .glass-panel {
+  background: #ffffff !important;
+  border: 1px solid rgba(175, 82, 222, 0.16) !important; /* purple lining */
+  box-shadow: 0 4px 20px rgba(255, 45, 85, 0.05), 0 2px 6px rgba(0, 0, 0, 0.01) !important;
+}
+.theme-apple-health .glass-panel-heavy {
+  background: #ffffff !important;
+  border: 1px solid rgba(30, 107, 67, 0.22) !important; /* dark green lining */
+  box-shadow: 0 16px 40px rgba(175, 82, 222, 0.07), 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+}
+.theme-apple-health .glass-pill {
+  background: rgba(255, 45, 85, 0.04) !important;
+  border: 1px solid rgba(255, 45, 85, 0.18) !important; /* red lining */
+  color: #ff2d55 !important;
+}
+.theme-apple-health .glass-pill:hover {
+  background: rgba(255, 45, 85, 0.08) !important;
+  border-color: rgba(255, 45, 85, 0.32) !important;
+}
+/* Typography text colors */
+.theme-apple-health .text-white,
+.theme-apple-health .text-zinc-100,
+.theme-apple-health .text-zinc-200 { color: #0c0d10 !important; }
+.theme-apple-health .text-zinc-300 { color: #1e2025 !important; }
+.theme-apple-health .text-zinc-400 { color: #3e4149 !important; }
+.theme-apple-health .text-zinc-500 { color: #8e8e93 !important; }
+.theme-apple-health .text-zinc-550 { color: #8e8e93 !important; }
+.theme-apple-health .text-zinc-650,
+.theme-apple-health .text-zinc-600 { color: #c7c7cc !important; }
+
+/* Completed indicator uses Apple Health Red */
+.theme-apple-health .indicator-completed {
+  background-color: #ff2d55 !important; /* Crimson Red */
+  border-color: #ff2d55 !important;
+  box-shadow: 0 3px 8px rgba(255, 45, 85, 0.28) !important;
+}
+.theme-apple-health .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-apple-health .indicator-empty {
+  background-color: #ffffff !important;
+  border-color: rgba(175, 82, 222, 0.25) !important; /* purple empty border */
+}
+
+/* Background fills for boxes/cards inside rows */
+.theme-apple-health .bg-zinc-950,
+.theme-apple-health .bg-zinc-900,
+.theme-apple-health .bg-zinc-950\/40,
+.theme-apple-health .bg-zinc-950\/50,
+.theme-apple-health .bg-zinc-950\/60,
+.theme-apple-health .bg-zinc-900\/60,
+.theme-apple-health .bg-zinc-900\/40 {
+  background-color: #f9f9fc !important;
+  color: #0c0d10 !important;
+  border-color: rgba(175, 82, 222, 0.14) !important;
+}
+.theme-apple-health .bg-zinc-900 {
+  background-color: #f2f2f7 !important;
+}
+
+/* Borders */
+.theme-apple-health .border-white/5,
+.theme-apple-health .border-white/10,
+.theme-apple-health .border-white/\[0\.02\],
+.theme-apple-health .border-white/\[0\.04\],
+.theme-apple-health .border-white/\[0\.01\] {
+  border-color: rgba(175, 82, 222, 0.14) !important;
+}
+
+/* Buttons inside the theme */
+.theme-apple-health button.bg-white,
+.theme-apple-health .bg-white button {
+  background-color: #5856d6 !important; /* iOS purple */
+  color: #ffffff !important;
+  border: 1px solid #5856d6 !important;
+}
+.theme-apple-health button.bg-white:hover,
+.theme-apple-health .bg-white button:hover {
+  background-color: #4a48b9 !important;
+}
+.theme-apple-health button.bg-white *,
+.theme-apple-health .bg-white button * {
+  color: #ffffff !important;
+}
+
+/* Wildcards matching fractional backgrounds */
+.theme-apple-health [class*="border-white/"] {
+  border-color: rgba(175, 82, 222, 0.18) !important;
+}
+.theme-apple-health [class*="bg-white/"] {
+  background-color: rgba(255, 45, 85, 0.03) !important;
+}
+.theme-apple-health [class*="bg-zinc-950/"] {
+  background-color: rgba(175, 82, 222, 0.03) !important;
+}
+.theme-apple-health [class*="bg-zinc-900/"] {
+  background-color: rgba(175, 82, 222, 0.03) !important;
+}
+
+/* Progress slider and accents */
+.theme-apple-health #gym-tracker div.h-1.w-full div {
+  background-color: #af52de !important; /* Purple slider */
+}
+.theme-apple-health .text-emerald-400 {
+  color: #1e6b43 !important; /* Dark Green text */
+}
+.theme-apple-health .border-emerald-400 {
+  border-color: #1e6b43 !important;
+}
+.theme-apple-health .bg-emerald-400/20 {
+  background-color: rgba(30, 107, 67, 0.12) !important;
+}
+
+/* Timeline labels sticky bg */
+.theme-apple-health .timeline-labels-bg {
+  background-color: #ffffff !important;
+  border-right: 1px solid rgba(175, 82, 222, 0.15) !important;
+}
+
+.theme-apple-health div[id^="timeline-day-"],
+.theme-apple-health div[id^="timeline-day-"]:hover {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+
+/* --- THEME CYBERPUNK (Toxic neon green + raw yellow) --- */
+.theme-cyberpunk {
+  background-color: #010103 !important;
+  color: #39ff14 !important;
+}
+.theme-cyberpunk .glass-panel {
+  background: #07070a !important;
+  border: 1px solid #facc15 !important;
+  box-shadow: 3px 3px 0px #facc15 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .glass-panel-heavy {
+  background: #0c0c10 !important;
+  border: 2px solid #facc15 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .glass-pill {
+  background: #141418 !important;
+  border: 1px solid #39ff14 !important;
+  border-radius: 0px !important;
+  color: #39ff14 !important;
+}
+.theme-cyberpunk .indicator-completed {
+  background-color: #facc15 !important;
+  border-color: #facc15 !important;
+  box-shadow: none !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .indicator-completed-dot {
+  background-color: #010103 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .indicator-empty {
+  background-color: #010103 !important;
+  border-color: #39ff14 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .text-white,
+.theme-cyberpunk .text-zinc-100,
+.theme-cyberpunk .text-zinc-200,
+.theme-cyberpunk .text-zinc-300 { color: #ffffff !important; }
+.theme-cyberpunk .text-zinc-400 { color: #39ff14 !important; }
+.theme-cyberpunk .text-zinc-500 { color: #facc15 !important; }
+.theme-cyberpunk .bg-zinc-950,
+.theme-cyberpunk .bg-zinc-900,
+.theme-cyberpunk .bg-zinc-950\/40,
+.theme-cyberpunk .bg-zinc-950\/50,
+.theme-cyberpunk .bg-zinc-950\/60,
+.theme-cyberpunk .bg-zinc-900\/60,
+.theme-cyberpunk .bg-zinc-900\/40 {
+  background-color: #121215 !important;
+  border-color: #22c55e !important;
+  border-radius: 0px !important;
+}
+
+/* --- THEME NORDIC (Polar chill blue, high-contrast slate) --- */
+.theme-nordic {
+  background-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+.theme-nordic .glass-panel {
+  background: #ffffff !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+}
+.theme-nordic .glass-panel-heavy {
+  background: #f8fafc !important;
+  border-color: rgba(148, 163, 184, 0.35) !important;
+}
+.theme-nordic .glass-pill {
+  background: #f1f5f9 !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  color: #334155 !important;
+}
+.theme-nordic .text-white,
+.theme-nordic .text-zinc-100,
+.theme-nordic .text-zinc-200 { color: #0f172a !important; }
+.theme-nordic .text-zinc-300 { color: #334155 !important; }
+.theme-nordic .text-zinc-400 { color: #475569 !important; }
+.theme-nordic .text-zinc-500 { color: #64748b !important; }
+.theme-nordic .text-zinc-600 { color: #94a3b8 !important; }
+.theme-nordic .indicator-completed {
+  background-color: #0284c7 !important; /* freeze sky blue */
+  border-color: #0284c7 !important;
+}
+.theme-nordic .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-nordic .indicator-empty {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+.theme-nordic .bg-zinc-950,
+.theme-nordic .bg-zinc-900,
+.theme-nordic .bg-zinc-950\/40,
+.theme-nordic .bg-zinc-950\/50,
+.theme-nordic .bg-zinc-950\/60,
+.theme-nordic .bg-zinc-900\/60,
+.theme-nordic .bg-zinc-900\/40 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* --- THEME FOREST (Moss dark + brass elements) --- */
+.theme-forest {
+  background-color: #09110e !important;
+  color: #e0ece6 !important;
+}
+.theme-forest .glass-panel {
+  background: #0f1c17 !important;
+  border-color: rgba(224, 236, 230, 0.05) !important;
+}
+.theme-forest .glass-panel-heavy {
+  background: #14251e !important;
+  border-color: rgba(224, 236, 230, 0.08) !important;
+}
+.theme-forest .glass-pill {
+  background: #14251e !important;
+  border-color: rgba(224, 236, 230, 0.06) !important;
+  color: #e0ece6 !important;
+}
+.theme-forest .text-white,
+.theme-forest .text-zinc-100,
+.theme-forest .text-zinc-200 { color: #ffffff !important; }
+.theme-forest .text-zinc-300 { color: #e0ece6 !important; }
+.theme-forest .text-zinc-400 { color: #8eaba0 !important; }
+.theme-forest .text-zinc-500 { color: #587368 !important; }
+.theme-forest .indicator-completed {
+  background-color: #d97706 !important; /* honey warm amber */
+  border-color: #d97706 !important;
+}
+.theme-forest .indicator-completed-dot {
+  background-color: #ffffff !important;
+}
+.theme-forest .indicator-empty {
+  background-color: #09110e !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+.theme-forest .bg-zinc-950,
+.theme-forest .bg-zinc-900,
+.theme-forest .bg-zinc-950\/40,
+.theme-forest .bg-zinc-950\/50,
+.theme-forest .bg-zinc-950\/60,
+.theme-forest .bg-zinc-900\/60,
+.theme-forest .bg-zinc-900\/40 {
+  background-color: #070d0b !important;
+  border-color: rgba(255,255,255,0.04) !important;
+}
+
+/* --- THEME SEPIA (Traditional vintage paper layout) --- */
+.theme-sepia {
+  background-color: #f3ecdb !important;
+  color: #3e3223 !important;
+}
+.theme-sepia .glass-panel {
+  background: #faf6eb !important;
+  border-color: rgba(62, 50, 35, 0.12) !important;
+}
+.theme-sepia .glass-panel-heavy {
+  background: #faf6eb !important;
+  border-color: rgba(62, 50, 35, 0.18) !important;
+}
+.theme-sepia .glass-pill {
+  background: #ebdcb9 !important;
+  border-color: rgba(62, 50, 35, 0.1) !important;
+  color: #3e3223 !important;
+}
+.theme-sepia .text-white,
+.theme-sepia .text-zinc-100,
+.theme-sepia .text-zinc-200 { color: #231a0e !important; }
+.theme-sepia .text-zinc-300 { color: #3e3223 !important; }
+.theme-sepia .text-zinc-400 { color: #514434 !important; }
+.theme-sepia .text-zinc-550,
+.theme-sepia .text-zinc-500 { color: #756755 !important; }
+.theme-sepia .text-zinc-650,
+.theme-sepia .text-zinc-600 { color: #948773 !important; }
+.theme-sepia .indicator-completed {
+  background-color: #8c6239 !important; /* leather tobacco */
+  border-color: #8c6239 !important;
+}
+.theme-sepia .indicator-completed-dot {
+  background-color: #faf6eb !important;
+}
+.theme-sepia .indicator-empty {
+  background-color: #faf6eb !important;
+  border-color: #dfd2b5 !important;
+}
+.theme-sepia .bg-zinc-950,
+.theme-sepia .bg-zinc-900,
+.theme-sepia .bg-zinc-950\/40,
+.theme-sepia .bg-zinc-950\/50,
+.theme-sepia .bg-zinc-950\/60,
+.theme-sepia .bg-zinc-900\/60,
+.theme-sepia .bg-zinc-900\/40 {
+  background-color: #ebdcb9 !important;
+  border-color: rgba(62, 50, 35, 0.08) !important;
+}
+
+/* --- TIMELINE LABEL STICKY BACKGROUNDS --- */
+.timeline-labels-bg {
+  background-color: #050608 !important; /* matches default theme */
+}
+
+.theme-apple-light .timeline-labels-bg {
+  background-color: #ffffff !important;
+}
+
+.theme-apple-dark .timeline-labels-bg {
+  background-color: #1c1c1e !important;
+}
+
+.theme-apple-reminders-dark .timeline-labels-bg {
+  background-color: #000000 !important;
+}
+
+.theme-apple-glass .timeline-labels-bg {
+  background-color: transparent !important;
+  background: transparent !important;
+  border-right: none !important;
+  color: #0b0a0a !important;
+}
+.theme-apple-glass .timeline-labels-bg .text-zinc-400 {
+  color: #0b0a0a !important;
+}
+
+.theme-cyberpunk .timeline-labels-bg {
+  background-color: #07070a !important;
+}
+
+.theme-nordic .timeline-labels-bg {
+  background-color: #ffffff !important;
+}
+
+.theme-forest .timeline-labels-bg {
+  background-color: #0f1c17 !important;
+}
+
+.theme-sepia .timeline-labels-bg {
+  background-color: #faf6eb !important;
+}
+
+/* --- THEME-ALIGNED HABIT LABELS & STREAK COUNT OVERRIDES --- */
+/* Default Slate Obsidian Theme */
+.habit-name {
+  color: #a1a1aa !important; /* text-zinc-400 */
+  transition: color 0.15s ease-in-out;
+}
+.habit-streak {
+  color: #fb923c !important; /* orange streak text */
+  transition: color 0.15s ease-in-out;
+}
+.habit-streak-flame {
+  color: #f97316 !important;
+  fill: rgba(249, 115, 22, 0.2) !important;
+  transition: color 0.15s ease-in-out, fill 0.15s ease-in-out;
+}
+
+/* Apple Light Theme (Reminders Red) */
+.theme-apple-light .habit-name {
+  color: #ff3b30 !important;
+}
+.theme-apple-light .habit-streak {
+  color: #ff3b30 !important;
+}
+.theme-apple-light .habit-streak-flame {
+  color: #ff3b30 !important;
+  fill: rgba(255, 59, 48, 0.15) !important;
+}
+
+/* Apple Dark Theme (Vivid Red) */
+.theme-apple-dark .habit-name {
+  color: #ff453a !important;
+}
+.theme-apple-dark .habit-streak {
+  color: #ff453a !important;
+}
+.theme-apple-dark .habit-streak-flame {
+  color: #ff453a !important;
+  fill: rgba(255, 69, 58, 0.18) !important;
+}
+
+/* Apple Reminders Dark Theme (iOS Red indicator look) */
+.theme-apple-reminders-dark .habit-name {
+  color: #ff453a !important;
+}
+.theme-apple-reminders-dark .habit-streak {
+  color: #ff453a !important;
+}
+.theme-apple-reminders-dark .habit-streak-flame {
+  color: #ff453a !important;
+  fill: rgba(255, 69, 58, 0.18) !important;
+}
+
+/* Apple Glass Theme (Vibrant Grassy Hill Green indicator look) */
+.theme-apple-glass .habit-name {
+  color: #1e6b43 !important;
+}
+.theme-apple-glass .habit-streak {
+  color: #1e6b43 !important;
+}
+.theme-apple-glass .habit-streak-flame {
+  color: #1e6b43 !important;
+  fill: rgba(30, 107, 67, 0.18) !important;
+}
+
+/* Apple Health Theme (Vibrant Crimson Red) */
+.theme-apple-health .habit-name {
+  color: #ff2d55 !important;
+}
+.theme-apple-health .habit-streak {
+  color: #ff2d55 !important;
+}
+.theme-apple-health .habit-streak-flame {
+  color: #ff2d55 !important;
+  fill: rgba(255, 45, 85, 0.15) !important;
+}
+
+/* Cyberpunk Theme (Yellow Warning indicator look) */
+.theme-cyberpunk .habit-name {
+  color: #facc15 !important;
+}
+.theme-cyberpunk .habit-streak {
+  color: #facc15 !important;
+}
+.theme-cyberpunk .habit-streak-flame {
+  color: #facc15 !important;
+  fill: rgba(250, 204, 21, 0.22) !important;
+}
+
+/* Nordic Theme (Chilling Sky Blue) */
+.theme-nordic .habit-name {
+  color: #0284c7 !important;
+}
+.theme-nordic .habit-streak {
+  color: #0284c7 !important;
+}
+.theme-nordic .habit-streak-flame {
+  color: #0284c7 !important;
+  fill: rgba(2, 132, 199, 0.15) !important;
+}
+
+/* Forest Theme (Golden Honey Warm Amber) */
+.theme-forest .habit-name {
+  color: #d97706 !important;
+}
+.theme-forest .habit-streak {
+  color: #d97706 !important;
+}
+.theme-forest .habit-streak-flame {
+  color: #d97706 !important;
+  fill: rgba(217, 119, 6, 0.15) !important;
+}
+
+/* Sepia Theme (Tobacco Leather) */
+.theme-sepia .habit-name {
+  color: #8c6239 !important;
+}
+.theme-sepia .habit-streak {
+  color: #8c6239 !important;
+}
+.theme-sepia .habit-streak-flame {
+  color: #8c6239 !important;
+  fill: rgba(140, 98, 57, 0.15) !important;
+}
+
+
+/* --- CALENDAR HOVER TOOLTIP HIGH CONTRAST & LEGIBILITY --- */
+/* Default / Baseline style */
+.calendar-tooltip-popover {
+  background-color: #090a0f !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #e4e4e7 !important;
+  transition: all 0.2s ease-in-out;
+}
+.calendar-tooltip-title {
+  color: #71717a !important;
+}
+.calendar-tooltip-body {
+  color: #d4d4d8 !important;
+}
+
+/* Apple Glass Hover Peek Visibility - Gorgeous high-contrast light frosted glass over scenic dark fjord */
+.theme-apple-glass .calendar-tooltip-popover {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(14px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+}
+.theme-apple-glass .calendar-tooltip-title {
+  color: #1e6b43 !important;
+  font-weight: 700 !important;
+}
+.theme-apple-glass .calendar-tooltip-body {
+  color: #0b0f15 !important;
+  font-weight: 600 !important;
+}
+
+/* Apple Light Hover Peek Visibility */
+.theme-apple-light .calendar-tooltip-popover {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+.theme-apple-light .calendar-tooltip-title {
+  color: #ff3b30 !important;
+  font-weight: 700 !important;
+}
+.theme-apple-light .calendar-tooltip-body {
+  color: #1c1c1e !important;
+  font-weight: 500 !important;
+}
+
+/* Apple Dark / Apple Reminders Dark */
+.theme-apple-dark .calendar-tooltip-popover,
+.theme-apple-reminders-dark .calendar-tooltip-popover {
+  background: #121212 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+.theme-apple-dark .calendar-tooltip-title,
+.theme-apple-reminders-dark .calendar-tooltip-title {
+  color: #ff453a !important;
+  font-weight: 700 !important;
+}
+.theme-apple-dark .calendar-tooltip-body,
+.theme-apple-reminders-dark .calendar-tooltip-body {
+  color: #f5f5f7 !important;
+}
+
+/* Apple Health */
+.theme-apple-health .calendar-tooltip-popover {
+  background: #ffffff !important;
+  border: 1px solid rgba(175, 82, 222, 0.18) !important;
+  box-shadow: 0 8px 24px rgba(255, 45, 85, 0.06) !important;
+}
+.theme-apple-health .calendar-tooltip-title {
+  color: #ff2d55 !important;
+  font-weight: 700 !important;
+}
+.theme-apple-health .calendar-tooltip-body {
+  color: #0c0d10 !important;
+}
+
+/* Nordic */
+.theme-nordic .calendar-tooltip-popover {
+  background: #ffffff !important;
+  border: 1px solid rgba(2, 132, 199, 0.15) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05) !important;
+}
+.theme-nordic .calendar-tooltip-title {
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+}
+.theme-nordic .calendar-tooltip-body {
+  color: #0f172a !important;
+}
+
+/* Forest */
+.theme-forest .calendar-tooltip-popover {
+  background: #09110e !important;
+  border: 1px solid rgba(217, 119, 6, 0.2) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+}
+.theme-forest .calendar-tooltip-title {
+  color: #d97706 !important;
+  font-weight: 700 !important;
+}
+.theme-forest .calendar-tooltip-body {
+  color: #e2e8f0 !important;
+}
+
+/* Sepia */
+.theme-sepia .calendar-tooltip-popover {
+  background: #faf6eb !important;
+  border: 1px solid rgba(140, 98, 57, 0.22) !important;
+  box-shadow: 0 8px 20px rgba(62, 50, 35, 0.08) !important;
+}
+.theme-sepia .calendar-tooltip-title {
+  color: #8c6239 !important;
+  font-weight: 700 !important;
+}
+.theme-sepia .calendar-tooltip-body {
+  color: #2b231d !important;
+}
+
+/* --- HYDRATION CIRCULAR PROGRESS GAUGE THEME OVERRIDES --- */
+/* Default theme (Slate Obsidian) */
+.water-circle-container {
+  background-color: rgba(9, 10, 15, 0.45) !important;
+  border-color: rgba(14, 165, 233, 0.2) !important;
+}
+.water-wave-fill {
+  background-color: rgba(14, 165, 233, 0.16) !important;
+  border-top: 1.5px solid rgba(14, 165, 233, 0.4) !important;
+}
+
+/* Apple Light */
+.theme-apple-light .water-circle-container {
+  background-color: rgba(0, 122, 255, 0.04) !important;
+  border-color: rgba(0, 122, 255, 0.18) !important;
+}
+.theme-apple-light .water-wave-fill {
+  background-color: rgba(0, 122, 255, 0.15) !important;
+  border-top: 1.5px solid rgba(0, 122, 255, 0.4) !important;
+}
+
+/* Apple Dark */
+.theme-apple-dark .water-circle-container {
+  background-color: rgba(10, 132, 255, 0.05) !important;
+  border-color: rgba(10, 132, 255, 0.2) !important;
+}
+.theme-apple-dark .water-wave-fill {
+  background-color: rgba(10, 132, 255, 0.15) !important;
+  border-top: 1.5px solid rgba(10, 132, 255, 0.4) !important;
+}
+
+/* Apple Reminders Dark */
+.theme-apple-reminders-dark .water-circle-container {
+  background-color: rgba(10, 132, 255, 0.05) !important;
+  border-color: rgba(10, 132, 255, 0.2) !important;
+}
+.theme-apple-reminders-dark .water-wave-fill {
+  background-color: rgba(10, 132, 255, 0.15) !important;
+  border-top: 1.5px solid rgba(10, 132, 255, 0.4) !important;
+}
+
+/* Apple Glass (Lake Fjord) */
+.theme-apple-glass .water-circle-container {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(30, 107, 67, 0.3) !important;
+}
+.theme-apple-glass .water-wave-fill {
+  background-color: rgba(2, 132, 199, 0.18) !important; /* Beautiful pure sky-blue lake water */
+  border-top: 1.5px solid rgba(2, 132, 199, 0.5) !important;
+}
+
+/* Apple Health */
+.theme-apple-health .water-circle-container {
+  background-color: rgba(0, 122, 255, 0.04) !important;
+  border-color: rgba(175, 82, 222, 0.18) !important;
+}
+.theme-apple-health .water-wave-fill {
+  background-color: rgba(0, 122, 255, 0.14) !important;
+  border-top: 1.5px solid rgba(0, 122, 255, 0.4) !important;
+}
+
+/* Cyberpunk */
+.theme-cyberpunk .water-circle-container {
+  background-color: rgba(1, 1, 3, 0.8) !important;
+  border-color: rgba(57, 255, 20, 0.25) !important;
+}
+.theme-cyberpunk .water-wave-fill {
+  background-color: rgba(57, 255, 20, 0.16) !important;
+  border-top: 1.5px solid rgba(57, 255, 20, 0.5) !important;
+}
+
+/* Nordic */
+.theme-nordic .water-circle-container {
+  background-color: rgba(2, 132, 199, 0.03) !important;
+  border-color: rgba(2, 132, 199, 0.2) !important;
+}
+.theme-nordic .water-wave-fill {
+  background-color: rgba(2, 132, 199, 0.15) !important;
+  border-top: 1.5px solid rgba(2, 132, 199, 0.4) !important;
+}
+
+/* Forest */
+.theme-forest .water-circle-container {
+  background-color: rgba(217, 119, 6, 0.03) !important;
+  border-color: rgba(217, 119, 6, 0.2) !important;
+}
+.theme-forest .water-wave-fill {
+  background-color: rgba(217, 119, 6, 0.15) !important;
+  border-top: 1.5px solid rgba(217, 119, 6, 0.4) !important;
+}
+
+/* Sepia */
+.theme-sepia .water-circle-container {
+  background-color: rgba(140, 98, 57, 0.05) !important;
+  border-color: rgba(140, 98, 57, 0.2) !important;
+}
+.theme-sepia .water-wave-fill {
+  background-color: rgba(140, 98, 57, 0.15) !important;
+  border-top: 1.5px solid rgba(140, 98, 57, 0.4) !important;
+}
+
+
+/* ========================================================
+   HABIT CREATOR INPUT & CONTROL OVERRIDES FOR ALL THEMES
+   ======================================================== */
+
+/* Baseline / Default slate-obsidian mode */
+.habit-creator-input {
+  background-color: #090a0f !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.habit-creator-input::placeholder {
+  color: #71717a !important;
+}
+.habit-creator-submit-btn {
+  background-color: #ffffff !important;
+  color: #090a0f !important;
+}
+.habit-creator-submit-btn:hover {
+  background-color: #e4e4e7 !important;
+}
+.habit-creator-pill {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  color: #a1a1aa !important;
+}
+.habit-creator-pill-delete {
+  color: #71717a !important;
+}
+.habit-creator-pill-delete:hover {
+  color: #ef4444 !important;
+}
+
+/* 1. Apple Light Theme */
+.theme-apple-light .habit-creator-input {
+  background-color: #f2f2f7 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.theme-apple-light .habit-creator-input::placeholder {
+  color: #8e8e93 !important;
+}
+.theme-apple-light .habit-creator-submit-btn {
+  background-color: #ff3b30 !important;
+  color: #ffffff !important;
+}
+.theme-apple-light .habit-creator-submit-btn:hover {
+  background-color: #e03227 !important;
+}
+.theme-apple-light .habit-creator-pill {
+  background-color: #f2f2f7 !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+  color: #3a3a3c !important;
+}
+.theme-apple-light .habit-creator-pill-delete {
+  color: #8e8e93 !important;
+}
+.theme-apple-light .habit-creator-pill-delete:hover {
+  color: #ff3b30 !important;
+}
+
+/* 2. Apple Dark Theme */
+.theme-apple-dark .habit-creator-input {
+  background-color: #1c1c1e !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.theme-apple-dark .habit-creator-input::placeholder {
+  color: #8e8e93 !important;
+}
+.theme-apple-dark .habit-creator-submit-btn {
+  background-color: #ff453a !important;
+  color: #ffffff !important;
+}
+.theme-apple-dark .habit-creator-submit-btn:hover {
+  background-color: #ff554b !important;
+}
+.theme-apple-dark .habit-creator-pill {
+  background-color: #2c2c2e !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  color: #aeaeb2 !important;
+}
+.theme-apple-dark .habit-creator-pill-delete {
+  color: #8e8e93 !important;
+}
+.theme-apple-dark .habit-creator-pill-delete:hover {
+  color: #ff453a !important;
+}
+
+/* 3. Apple Reminders Dark Theme */
+.theme-apple-reminders-dark .habit-creator-input {
+  background-color: #1c1c1e !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.theme-apple-reminders-dark .habit-creator-input::placeholder {
+  color: #8e8e93 !important;
+}
+.theme-apple-reminders-dark .habit-creator-submit-btn {
+  background-color: #ff453a !important;
+  color: #ffffff !important;
+}
+.theme-apple-reminders-dark .habit-creator-submit-btn:hover {
+  background-color: #ff554b !important;
+}
+.theme-apple-reminders-dark .habit-creator-pill {
+  background-color: #2c2c2e !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  color: #aeaeb2 !important;
+}
+.theme-apple-reminders-dark .habit-creator-pill-delete {
+  color: #8e8e93 !important;
+}
+.theme-apple-reminders-dark .habit-creator-pill-delete:hover {
+  color: #ff453a !important;
+}
+
+/* 4. Apple Glass Theme (Liquid Mode) - Ultra visible, gorgeous frosted clear input & dark label */
+.theme-apple-glass .habit-creator-input {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #0d1116 !important;
+  border: 1px solid rgba(30, 107, 67, 0.3) !important;
+}
+.theme-apple-glass .habit-creator-input::placeholder {
+  color: #55667e !important;
+}
+.theme-apple-glass .habit-creator-submit-btn {
+  background-color: #1e6b43 !important;
+  color: #ffffff !important;
+}
+.theme-apple-glass .habit-creator-submit-btn:hover {
+  background-color: #154c2f !important;
+}
+.theme-apple-glass .habit-creator-pill {
+  background-color: rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(30, 107, 67, 0.15) !important;
+  color: #0d1116 !important;
+  font-weight: 600 !important;
+}
+.theme-apple-glass .habit-creator-pill-delete {
+  color: #55667e !important;
+}
+.theme-apple-glass .habit-creator-pill-delete:hover {
+  color: #b91c1c !important;
+}
+
+/* 5. Apple Health Theme */
+.theme-apple-health .habit-creator-input {
+  background-color: #f2f2f7 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.theme-apple-health .habit-creator-input::placeholder {
+  color: #8e8e93 !important;
+}
+.theme-apple-health .habit-creator-submit-btn {
+  background-color: #ff2d55 !important;
+  color: #ffffff !important;
+}
+.theme-apple-health .habit-creator-submit-btn:hover {
+  background-color: #d81b43 !important;
+}
+.theme-apple-health .habit-creator-pill {
+  background-color: #f2f2f7 !important;
+  border-color: rgba(0, 0, 0, 0.05) !important;
+  color: #3a3a3c !important;
+}
+.theme-apple-health .habit-creator-pill-delete {
+  color: #8e8e93 !important;
+}
+.theme-apple-health .habit-creator-pill-delete:hover {
+  color: #ff2d55 !important;
+}
+
+/* 6. Cyberpunk Theme */
+.theme-cyberpunk .habit-creator-input {
+  background-color: #000000 !important;
+  color: #facc15 !important;
+  border: 1px solid #facc15 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .habit-creator-input::placeholder {
+  color: rgba(250, 204, 21, 0.5) !important;
+}
+.theme-cyberpunk .habit-creator-submit-btn {
+  background-color: #facc15 !important;
+  color: #000000 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .habit-creator-submit-btn:hover {
+  background-color: #eab308 !important;
+}
+.theme-cyberpunk .habit-creator-pill {
+  background-color: rgba(250, 204, 21, 0.05) !important;
+  border: 1px solid rgba(250, 204, 21, 0.3) !important;
+  color: #facc15 !important;
+  border-radius: 0px !important;
+}
+.theme-cyberpunk .habit-creator-pill-delete {
+  color: rgba(250, 204, 21, 0.6) !important;
+}
+.theme-cyberpunk .habit-creator-pill-delete:hover {
+  color: #ef4444 !important;
+}
+
+/* 7. Nordic Theme */
+.theme-nordic .habit-creator-input {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.theme-nordic .habit-creator-input::placeholder {
+  color: #94a3b8 !important;
+}
+.theme-nordic .habit-creator-submit-btn {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+.theme-nordic .habit-creator-submit-btn:hover {
+  background-color: #0369a1 !important;
+}
+.theme-nordic .habit-creator-pill {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+.theme-nordic .habit-creator-pill-delete {
+  color: #94a3b8 !important;
+}
+.theme-nordic .habit-creator-pill-delete:hover {
+  color: #ef4444 !important;
+}
+
+/* 8. Forest Theme */
+.theme-forest .habit-creator-input {
+  background-color: #08110e !important;
+  color: #e2ebf0 !important;
+  border: 1px solid rgba(217, 119, 6, 0.3) !important;
+}
+.theme-forest .habit-creator-input::placeholder {
+  color: rgba(226, 235, 240, 0.4) !important;
+}
+.theme-forest .habit-creator-submit-btn {
+  background-color: #d97706 !important;
+  color: #08110e !important;
+}
+.theme-forest .habit-creator-submit-btn:hover {
+  background-color: #b45309 !important;
+}
+.theme-forest .habit-creator-pill {
+  background-color: rgba(217, 119, 6, 0.05) !important;
+  border: 1px solid rgba(217, 119, 6, 0.2) !important;
+  color: #e2e8f0 !important;
+}
+.theme-forest .habit-creator-pill-delete {
+  color: rgba(217, 119, 6, 0.6) !important;
+}
+.theme-forest .habit-creator-pill-delete:hover {
+  color: #ef4444 !important;
+}
+
+/* 9. Sepia Theme */
+.theme-sepia .habit-creator-input {
+  background-color: #f4edd4 !important;
+  color: #2b231d !important;
+  border: 1px solid rgba(140, 98, 57, 0.3) !important;
+}
+.theme-sepia .habit-creator-input::placeholder {
+  color: rgba(62, 50, 35, 0.4) !important;
+}
+.theme-sepia .habit-creator-submit-btn {
+  background-color: #8c6239 !important;
+  color: #faf6eb !important;
+}
+.theme-sepia .habit-creator-submit-btn:hover {
+  background-color: #6d4b2b !important;
+}
+.theme-sepia .habit-creator-pill {
+  background-color: #f4edd4 !important;
+  border: 1px solid rgba(140, 98, 57, 0.2) !important;
+  color: #3e3223 !important;
+}
+.theme-sepia .habit-creator-pill-delete {
+  color: rgba(140, 98, 57, 0.6) !important;
+}
+.theme-sepia .habit-creator-pill-delete:hover {
+  color: #b91c1c !important;
+}
+
+
+
