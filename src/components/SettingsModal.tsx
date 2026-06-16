@@ -5,18 +5,62 @@
 
 import React, { useState } from "react";
 import { AppState, GymRoutine } from "../types";
-import { X, Plus, Trash2, ShieldCheck, Dumbbell, Flame, Droplet, ChevronUp, ChevronDown, Shuffle } from "lucide-react";
+import { X, Plus, Trash2, ShieldCheck, Dumbbell, Flame, Droplet, ChevronUp, ChevronDown, Shuffle, Cloud, Loader2 } from "lucide-react";
+import { auth } from "../firebase";
+import { 
+  User, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut 
+} from "firebase/auth";
+import { isIosNativeApp, requestHealthKitAuth } from "../utils/nativeBridge";
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   state: AppState;
   onSaveState: (updatedState: AppState) => void;
+  user: User | null;
+  dbLoading: boolean;
 }
 
-export function SettingsModal({ isOpen, onClose, state, onSaveState }: SettingsModalProps) {
-  const [activeTab, setActiveTab] = useState<"gym" | "goals" | "themes">("gym");
+export function SettingsModal({ isOpen, onClose, state, onSaveState, user, dbLoading }: SettingsModalProps) {
+  const [activeTab, setActiveTab] = useState<"gym" | "goals" | "themes" | "sync">("gym");
   const [selectedRoutineId, setSelectedRoutineId] = useState<string>("A");
+
+  // Credentials and Auth states
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [healthAuthStatus, setHealthAuthStatus] = useState<"unchecked" | "authorizing" | "success" | "failed">("unchecked");
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    setAuthLoading(true);
+    try {
+      if (isSignUp) {
+        await createUserWithEmailAndPassword(auth, authEmail, authPassword);
+      } else {
+        await signInWithEmailAndPassword(auth, authEmail, authPassword);
+      }
+      setAuthEmail("");
+      setAuthPassword("");
+    } catch (err: any) {
+      console.error(err);
+      setAuthError(err.message || "Authentication failed.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    if (window.confirm("Log out from cloud sync?")) {
+      await signOut(auth);
+    }
+  };
 
   // Local transient states for form management
   const [newExerciseName, setNewExerciseName] = useState("");
@@ -34,7 +78,10 @@ export function SettingsModal({ isOpen, onClose, state, onSaveState }: SettingsM
     { id: "apple-dark", name: "Apple dark Calendars", bg: "bg-[#000000]", desc: "True pitch-black iOS reminders layout, crimson highlights" },
     { id: "apple-reminders-dark", name: "Apple Reminders Dark", bg: "bg-black border border-white/10", desc: "Sleek iOS dark mode reminders layout with circular red highlights" },
     { id: "apple-health", name: "Apple Health Active", bg: "bg-white border border-[#ff2d55]/40", text: "text-[#ff2d55]", desc: "Clean energetic light layout with crimson, purple, and green outlines" },
-    { id: "apple-glass", name: "Liquid Glass", bg: "bg-slate-900 border border-white/10", desc: "Clean aesthetic glass card floating atop a stunning scenic mountain fjord lake" },
+    { id: "apple-glass", name: "Liquid Glass (Fjord)", bg: "bg-slate-900 border border-white/10", desc: "Clean aesthetic glass card floating atop a stunning scenic mountain fjord lake" },
+    { id: "apple-glass-forest", name: "Liquid Glass (Forest)", bg: "bg-emerald-950 border border-white/10", desc: "Frosted glass floating atop a misty green forest canopy" },
+    { id: "apple-glass-mountain", name: "Liquid Glass (Mountain)", bg: "bg-sky-950 border border-white/10", desc: "Frosted glass floating atop majestic snowy alpine peaks" },
+    { id: "apple-glass-night", name: "Liquid Glass (Aurora)", bg: "bg-indigo-950 border border-white/10", desc: "Frosted glass floating atop a starry midnight sky & aurora waves" },
     { id: "cyberpunk", name: "Cyberpunk Terminal Aura", bg: "bg-[#010103]", text: "text-[#39ff14]", desc: "Neon toxic lime codes & warning yellow amber plates" },
     { id: "nordic", name: "Nordic Frost Ice", bg: "bg-[#e2e8f0]", desc: "Calm chilling blue-grays & snow elements, arctic focus" },
     { id: "forest", name: "Earthy Forest Moss", bg: "bg-[#09110e]", desc: "Earthy quiet green canopies & sweet golden honey brass" },
@@ -280,6 +327,17 @@ export function SettingsModal({ isOpen, onClose, state, onSaveState }: SettingsM
             }`}
           >
             System Themes
+          </button>
+          <button
+            id="tab-sync-btn"
+            onClick={() => setActiveTab("sync")}
+            className={`font-display text-xs tracking-widest uppercase pb-2 border-b-2 transition-all cursor-pointer ${
+              activeTab === "sync"
+                ? "border-emerald-400 text-emerald-400 font-semibold"
+                : "border-transparent text-zinc-400 hover:text-white"
+            }`}
+          >
+            Device Sync
           </button>
         </div>
 
@@ -682,6 +740,159 @@ export function SettingsModal({ isOpen, onClose, state, onSaveState }: SettingsM
                   );
                 })}
               </div>
+            </div>
+          )}
+          {activeTab === "sync" && (
+            <div id="sync-config-panel" className="space-y-6 animate-fade-in pb-4">
+              <p id="sync-intro" className="text-xs text-zinc-400 leading-relaxed font-mono">
+                {user 
+                  ? "Your account is automatically synchronizing all changes in real-time."
+                  : "Sign in or create a free account to automatically back up your workspace and sync across devices."
+                }
+              </p>
+
+              {user ? (
+                <div className="p-4 rounded-2xl bg-white/[0.01] border border-white/5 space-y-4 font-mono text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500">Sync Account:</span>
+                    <span className="text-emerald-400 font-semibold truncate max-w-[200px]" title={user.email || ""}>
+                      {user.email}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500">User ID (UID):</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-zinc-300 select-all font-semibold truncate max-w-[120px]" title={user.uid}>
+                        {user.uid}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(user.uid);
+                          alert("User ID copied to clipboard!");
+                        }}
+                        className="text-[10px] text-zinc-400 hover:text-white cursor-pointer px-2 py-0.5 rounded bg-white/5 border border-white/10 transition-colors"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500">Status:</span>
+                    <span className={dbLoading ? "text-amber-400 animate-pulse" : "text-emerald-400"}>
+                      {dbLoading ? "Uploading/Downloading..." : "Synced & Online"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full bg-rose-500/10 hover:bg-rose-500 text-rose-450 hover:text-white py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer border border-rose-500/20"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleAuthSubmit} className="space-y-4">
+                  {authError && (
+                    <div className="text-[10px] font-mono text-rose-450 bg-rose-500/10 border border-rose-500/20 px-3 py-2 rounded-lg leading-tight">
+                      {authError}
+                    </div>
+                  )}
+                  
+                  <div className="space-y-1">
+                    <label className="block text-[9px] uppercase tracking-wider text-zinc-500 font-mono">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full bg-zinc-900/60 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-green/40 transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-[9px] uppercase tracking-wider text-zinc-500 font-mono">Password</label>
+                    <input
+                      type="password"
+                      required
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-zinc-900/60 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-green/40 transition-colors"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="w-full bg-zinc-100 hover:bg-brand-green hover:text-black text-zinc-900 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all uppercase flex items-center justify-center gap-1.5 cursor-pointer mt-6"
+                  >
+                    {authLoading ? (
+                      <Loader2 size={12} className="animate-spin" />
+                    ) : isSignUp ? (
+                      "Create Account"
+                    ) : (
+                      "Sign In"
+                    )}
+                  </button>
+
+                  <div className="text-center pt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSignUp(!isSignUp);
+                        setAuthError("");
+                      }}
+                      className="text-[10px] text-zinc-500 hover:text-white transition-colors cursor-pointer underline font-mono"
+                    >
+                      {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up for Free"}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Apple Health integration inside settings under native wrapper */}
+              {isIosNativeApp() && (
+                <div className="p-4 rounded-2xl bg-white/[0.01] border border-white/5 space-y-3 font-mono text-xs mt-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-zinc-500 font-bold uppercase tracking-wider text-[10px]">Apple Health Integration</span>
+                    <span className="text-[9px] bg-red-500/10 text-red-400 border border-red-500/20 px-1 py-0.2 rounded font-bold uppercase">iOS Native</span>
+                  </div>
+                  <p className="text-[10px] text-zinc-400 leading-normal">
+                    Sync your daily water logging, weight logs, and nutrition macros directly into Apple Health on your iPhone.
+                  </p>
+                  <button
+                    type="button"
+                    disabled={healthAuthStatus === "authorizing" || healthAuthStatus === "success"}
+                    onClick={async () => {
+                      setHealthAuthStatus("authorizing");
+                      const success = await requestHealthKitAuth();
+                      if (success) {
+                        setHealthAuthStatus("success");
+                      } else {
+                        setHealthAuthStatus("failed");
+                        setTimeout(() => setHealthAuthStatus("unchecked"), 3000);
+                      }
+                    }}
+                    className={`w-full py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer border ${
+                      healthAuthStatus === "success"
+                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                        : healthAuthStatus === "authorizing"
+                        ? "bg-zinc-800 text-zinc-500 border-zinc-700"
+                        : "bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border-white/10"
+                    }`}
+                  >
+                    {healthAuthStatus === "success"
+                      ? "Apple Health Synced"
+                      : healthAuthStatus === "authorizing"
+                      ? "Authorizing..."
+                      : healthAuthStatus === "failed"
+                      ? "Auth Failed"
+                      : "Sync Apple Health"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

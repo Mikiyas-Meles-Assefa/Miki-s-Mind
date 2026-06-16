@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AppState } from "./types";
 import { generateDefaultState, getRelativeDateKey, formatShortDate } from "./utils";
 import { SettingsModal } from "./components/SettingsModal";
@@ -17,12 +17,17 @@ import {
   Dumbbell, 
   Apple, 
   Droplet, 
-  Sparkles, 
-  Layers, 
-  Clock, 
-  Info,
-  LineChart
+  Clock
 } from "lucide-react";
+import { auth, db } from "./firebase";
+import { onIdTokenChanged, User } from "firebase/auth";
+import { doc, setDoc, onSnapshot } from "firebase/firestore";
+import { 
+  isIosNativeApp, 
+  updateWidgetMetrics, 
+  updateWaterNudge, 
+  updateAuthUid
+} from "./utils/nativeBridge";
 
 export default function App() {
   const [state, setState] = useState<AppState>(() => {
@@ -32,7 +37,6 @@ export default function App() {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.routines && parsed.targets && parsed.dailyLogs) {
-          // If the parsed state has the old routines, upgrade to LaTeX matrix spec
           const aRoutine = parsed.routines.find((r: any) => r.id === "A");
           const hasOldRoutines = !aRoutine || aRoutine.exercises.length < 5 || aRoutine.exercises.some((e: any) => e.name === "Incline Bench Press" || e.name === "Hack Squat");
           if (hasOldRoutines) {
@@ -54,20 +58,183 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState<"home" | "gym" | "nutrition" | "water">("home");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [dbLoading, setDbLoading] = useState(false);
+  const [hasLoadedFromDb, setHasLoadedFromDb] = useState(false);
 
-  // Sync state mutations to local storage
+  const lastSyncedStateRef = useRef<string>("");
+  const hasLoadedFromDbRef = useRef<boolean>(false);
+
+  // 1. Auth subscription
   useEffect(() => {
-    localStorage.setItem("mickey_mind_os_state", JSON.stringify(state));
+    const unsubscribe = onIdTokenChanged(auth, async (u) => {
+      setUser(u);
+      if (isIosNativeApp()) {
+        const token = u ? await u.getIdToken() : null;
+        updateAuthUid(u ? u.uid : null, token);
+      }
+      if (!u) {
+        setHasLoadedFromDb(false);
+        hasLoadedFromDbRef.current = false;
+        // Logged out: fallback to local storage
+        const saved = localStorage.getItem("mickey_mind_os_state");
+        if (saved) {
+          try {
+            setState(JSON.parse(saved));
+          } catch (e) {
+            console.error("Failed to load local storage state on logout:", e);
+          }
+        }
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  // 2. Firestore Sync: Listener
+  useEffect(() => {
+    if (!user) {
+      setHasLoadedFromDb(false);
+      hasLoadedFromDbRef.current = false;
+      return;
+    }
+
+    setDbLoading(true);
+    const docRef = doc(db, "users", user.uid);
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      setDbLoading(false);
+      if (docSnap.exists()) {
+        const dbData = docSnap.data() as AppState;
+        const dbDataStr = JSON.stringify(dbData);
+        if (dbDataStr !== lastSyncedStateRef.current) {
+          lastSyncedStateRef.current = dbDataStr;
+          setState(dbData);
+        }
+        hasLoadedFromDbRef.current = true;
+        setHasLoadedFromDb(true);
+      } else {
+        // Document does not exist in DB yet: write current local state
+        const currentLocalStr = JSON.stringify(state);
+        lastSyncedStateRef.current = currentLocalStr;
+        setDoc(docRef, state).then(() => {
+          hasLoadedFromDbRef.current = true;
+          setHasLoadedFromDb(true);
+        }).catch((err) => {
+          console.error("Error setting initial doc in Firestore:", err);
+        });
+      }
+    }, (error) => {
+      console.error("Firestore sync error:", error);
+      setDbLoading(false);
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  // 3. Firestore Sync: Local changes writeback
+  useEffect(() => {
+    const stateStr = JSON.stringify(state);
+    localStorage.setItem("mickey_mind_os_state", stateStr);
+
+    // Only write back to cloud if we have successfully synced from the cloud first!
+    if (user && hasLoadedFromDbRef.current && stateStr !== lastSyncedStateRef.current) {
+      lastSyncedStateRef.current = stateStr;
+      const docRef = doc(db, "users", user.uid);
+      setDoc(docRef, state).catch((err) => {
+        console.error("Error writing local state to Firestore:", err);
+      });
+    }
+  }, [state, user]);
+
+  // 4. iOS Widget & Notifications Native Sync
+  useEffect(() => {
+    if (!isIosNativeApp()) return;
+
+    const todayKey = getRelativeDateKey(0);
+    const log = state.dailyLogs[todayKey] || {
+      date: todayKey,
+      routineId: "R",
+      meals: [],
+      waterIntake: 0
+    };
+    
+    const rId = log.routineId || "R";
+    const targets = state.targets[rId] || {
+      calories: 2200,
+      fat: 70,
+      tier1Protein: 100,
+      tier2Protein: 30,
+      water: 2500
+    };
+
+    const mealsList = log.meals || [];
+    const caloriesLogged = mealsList.reduce((sum, m) => sum + m.calories, 0);
+    const fatLogged = mealsList.reduce((sum, m) => sum + m.fat, 0);
+    const t1Logged = mealsList.reduce((sum, m) => sum + m.tier1Protein, 0);
+    const t2Logged = mealsList.reduce((sum, m) => sum + m.tier2Protein, 0);
+    const proteinLogged = t1Logged + t2Logged;
+    const waterLogged = log.waterIntake || 0;
+
+    const caloriesTarget = targets.calories;
+    const proteinTarget = targets.tier1Protein + targets.tier2Protein;
+    const waterTarget = targets.water;
+    const fatTarget = targets.fat;
+
+    updateWidgetMetrics({
+      caloriesTarget,
+      caloriesLogged,
+      proteinTarget,
+      proteinLogged,
+      waterTarget,
+      waterLogged,
+      fatTarget,
+      fatLogged
+    });
+
+    const waterRemaining = Math.max(0, waterTarget - waterLogged);
+    updateWaterNudge(waterRemaining);
   }, [state]);
 
-  const handleSaveState = (updatedState: AppState) => {
-    setState(updatedState);
-  };
 
-  const handleResetEntireOS = () => {
-    if (window.confirm("Factory reset Mickey Mind?")) {
-      setState(generateDefaultState());
-    }
+  const handleSaveState = (updatedState: AppState) => {
+    // Inject widgetToday summary on save so it's always up-to-date in database
+    const todayKey = getRelativeDateKey(0);
+    const log = updatedState.dailyLogs[todayKey] || {
+      date: todayKey,
+      routineId: "R",
+      meals: [],
+      waterIntake: 0
+    };
+    const rId = log.routineId || "R";
+    const targets = updatedState.targets[rId] || {
+      calories: 2200,
+      fat: 70,
+      tier1Protein: 100,
+      tier2Protein: 30,
+      water: 2500
+    };
+
+    const mealsList = log.meals || [];
+    const caloriesLogged = mealsList.reduce((sum, m) => sum + m.calories, 0);
+    const fatLogged = mealsList.reduce((sum, m) => sum + m.fat, 0);
+    const t1Logged = mealsList.reduce((sum, m) => sum + m.tier1Protein, 0);
+    const t2Logged = mealsList.reduce((sum, m) => sum + m.tier2Protein, 0);
+    const proteinLogged = t1Logged + t2Logged;
+    const waterLogged = log.waterIntake || 0;
+
+    const widgetState = {
+      ...updatedState,
+      widgetToday: {
+        caloriesTarget: targets.calories,
+        caloriesLogged,
+        proteinTarget: targets.tier1Protein + targets.tier2Protein,
+        proteinLogged,
+        waterTarget: targets.water,
+        waterLogged,
+        fatTarget: targets.fat,
+        fatLogged
+      }
+    };
+    setState(widgetState);
   };
 
   // Human date display for header
@@ -220,6 +387,8 @@ export default function App() {
         onClose={() => setIsSettingsOpen(false)}
         state={state}
         onSaveState={handleSaveState}
+        user={user}
+        dbLoading={dbLoading}
       />
 
     </div>

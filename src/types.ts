@@ -60,4 +60,14 @@ export interface AppState {
   dailyLogs: Record<string, DailyLog>; // date -> DailyLog
   customHabitsList: string[]; // List of registered custom habits
   theme?: string; // Selected theme ID
+  widgetToday?: {
+    caloriesTarget: number;
+    caloriesLogged: number;
+    proteinTarget: number;
+    proteinLogged: number;
+    waterTarget: number;
+    waterLogged: number;
+    fatTarget: number;
+    fatLogged: number;
+  };
 }

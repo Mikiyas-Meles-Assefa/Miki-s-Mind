@@ -1,0 +1,9 @@
+{
+  "short_name": "Mickey Mind",
+  "name": "Mickey Mind Personal OS",
+  "start_url": "/",
+  "background_color": "#050608",
+  "theme_color": "#050608",
+  "display": "standalone",
+  "orientation": "portrait"
+}

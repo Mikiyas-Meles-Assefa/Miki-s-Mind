@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { AppState, DailyLog } from "../types";
 import { getRelativeDateKey, formatShortDate } from "../utils";
 import { GlassWater, Droplet, Plus, Trash2, Delete, RotateCcw } from "lucide-react";
+import { isIosNativeApp, writeWaterToHealthKit } from "../utils/nativeBridge";
 
 interface WaterTrackerProps {
   state: AppState;
@@ -44,6 +45,10 @@ export function WaterTracker({ state, onSaveState }: WaterTrackerProps) {
       ...todayLog,
       waterIntake: updatedIntake,
     };
+
+    if (isIosNativeApp()) {
+      writeWaterToHealthKit(amount);
+    }
 
     onSaveState({
       ...state,

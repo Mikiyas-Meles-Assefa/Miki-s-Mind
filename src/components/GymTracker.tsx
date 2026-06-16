@@ -532,6 +532,40 @@ export function GymTracker({ state, onSaveState }: GymTrackerProps) {
                       <div className="flex items-center justify-between">
                         <span className="text-[8px] font-mono tracking-widest text-zinc-500 uppercase">Input metrics</span>
                         <div className="flex gap-1.5">
+                          {loggedSets.length > 0 && (
+                            <button
+                              onClick={() => {
+                                if (window.confirm("Clear logged sets for this exercise?")) {
+                                  const existingLog = state.dailyLogs[selectedDateKey] || {
+                                    date: selectedDateKey,
+                                    routineId: "",
+                                    gymLog: {},
+                                    meals: [],
+                                    waterIntake: 0,
+                                    customHabits: {},
+                                  };
+                                  const updatedGymLog = { ...(existingLog.gymLog || {}) };
+                                  delete updatedGymLog[activeEx.id];
+                                  
+                                  onSaveState({
+                                    ...state,
+                                    dailyLogs: {
+                                      ...state.dailyLogs,
+                                      [selectedDateKey]: {
+                                        ...existingLog,
+                                        gymLog: updatedGymLog
+                                      }
+                                    }
+                                  });
+                                  setEditingExerciseId(null);
+                                }
+                              }}
+                              className="p-1 rounded hover:bg-rose-500/10 text-rose-400 transition-colors cursor-pointer mr-1"
+                              title="Clear Log"
+                            >
+                              <Trash2 size={11} />
+                            </button>
+                          )}
                           <button
                             onClick={() => handleSaveSets(selectedDateKey, activeEx.id)}
                             className="p-1 rounded bg-white hover:bg-zinc-200 text-zinc-950 transition-colors cursor-pointer"
